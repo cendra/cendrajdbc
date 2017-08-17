@@ -12,12 +12,6 @@ public class SQLExceptionWrapper extends Exception {
 	 */
 	private static final long serialVersionUID = -5504598004204150746L;
 
-	// SQLException.getMessage
-	// SQLException.getCause
-
-	// SQLException.getSQLState
-	// SQLException.getErrorCode
-
 	private SQLException sQLException;
 
 	private ZonedDateTime time;
