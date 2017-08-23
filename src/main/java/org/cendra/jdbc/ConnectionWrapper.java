@@ -224,7 +224,7 @@ public class ConnectionWrapper {
 			return executeQueryToTable(preparedStatement, sql);
 
 		} catch (SQLException e) {
-
+			printSQLEnd(buildPrintSQLStart(formatSQL(args, sql)));
 			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_SELECT,
 					TITLE_SELECT, SUBJECT_SELECT);
 		}
@@ -236,7 +236,7 @@ public class ConnectionWrapper {
 
 		List<Object[]> listT = new ArrayList<Object[]>();
 
-		String msg = printSQLStart(sql);
+		String msg = buildPrintSQLStart(sql);
 
 		ResultSet resultSet = preparedStatement.executeQuery();
 		printSQLWarning(resultSet.getWarnings());
@@ -284,25 +284,26 @@ public class ConnectionWrapper {
 
 		try {
 
-//			PreparedStatement preparedStatement = this.getConnection()
-//					.prepareStatement(sql);
-//			printSQLWarning(preparedStatement.getWarnings());
-//
-//			if (args != null) {
-//				for (int i = 0; i < args.length; i++) {
-//					set(preparedStatement, args[i], (i + 1));
-//				}
-//			}
-//
-//			sql = this.formatSQL(preparedStatement, args, sql);
-//
-//			this.addSqlStatement(sql);
-//
-//			return executeUpdateByExample(preparedStatement, sql);
-			
+			// PreparedStatement preparedStatement = this.getConnection()
+			// .prepareStatement(sql);
+			// printSQLWarning(preparedStatement.getWarnings());
+			//
+			// if (args != null) {
+			// for (int i = 0; i < args.length; i++) {
+			// set(preparedStatement, args[i], (i + 1));
+			// }
+			// }
+			//
+			// sql = this.formatSQL(preparedStatement, args, sql);
+			//
+			// this.addSqlStatement(sql);
+			//
+			// return executeUpdateByExample(preparedStatement, sql);
+
 			return execute(sql, args);
 
 		} catch (SQLException e) {
+			printSQLEnd(buildPrintSQLStart(formatSQL(args, sql)));
 			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_INSERT,
 					TITLE_INSERT, SUBJECT_INSERT);
 		}
@@ -316,25 +317,26 @@ public class ConnectionWrapper {
 
 		try {
 
-//			PreparedStatement preparedStatement = this.getConnection()
-//					.prepareStatement(sql);
-//			printSQLWarning(preparedStatement.getWarnings());
-//
-//			if (args != null) {
-//				for (int i = 0; i < args.length; i++) {
-//					set(preparedStatement, args[i], (i + 1));
-//				}
-//			}
-//
-//			sql = this.formatSQL(preparedStatement, args, sql);
-//
-//			this.addSqlStatement(sql);
-//
-//			return executeUpdateByExample(preparedStatement, sql);
-			
+			// PreparedStatement preparedStatement = this.getConnection()
+			// .prepareStatement(sql);
+			// printSQLWarning(preparedStatement.getWarnings());
+			//
+			// if (args != null) {
+			// for (int i = 0; i < args.length; i++) {
+			// set(preparedStatement, args[i], (i + 1));
+			// }
+			// }
+			//
+			// sql = this.formatSQL(preparedStatement, args, sql);
+			//
+			// this.addSqlStatement(sql);
+			//
+			// return executeUpdateByExample(preparedStatement, sql);
+
 			return execute(sql, args);
 
 		} catch (SQLException e) {
+			printSQLEnd(buildPrintSQLStart(formatSQL(args, sql)));
 			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_UPDATE,
 					TITLE_UPDATE, SUBJECT_UPDATE);
 		}
@@ -351,6 +353,7 @@ public class ConnectionWrapper {
 			return execute(sql, args);
 
 		} catch (SQLException e) {
+			printSQLEnd(buildPrintSQLStart(formatSQL(args, sql)));
 			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_DELETE,
 					TITLE_DELETE, SUBJECT_DELETE);
 		}
@@ -360,6 +363,7 @@ public class ConnectionWrapper {
 
 		PreparedStatement preparedStatement = this.getConnection()
 				.prepareStatement(sql);
+
 		printSQLWarning(preparedStatement.getWarnings());
 
 		if (args != null) {
@@ -379,9 +383,11 @@ public class ConnectionWrapper {
 	private int executeUpdateByExample(PreparedStatement preparedStatement,
 			String sql) throws SQLException {
 
-		String msg = printSQLStart(sql);
+		String msg = buildPrintSQLStart(sql);
 
-		int r = preparedStatement.executeUpdate();
+		int r = 0;
+
+		r = preparedStatement.executeUpdate();
 
 		printSQLEnd(msg);
 
@@ -394,7 +400,7 @@ public class ConnectionWrapper {
 
 	// ===================================================================================================
 
-	private String printSQLStart(String sql) throws SQLException {
+	private String buildPrintSQLStart(String sql) {
 
 		if (isVerbose()) {
 			return "\n\n[..] Ejecutando SQL " + ZonedDateTime.now() + "\n\n"
@@ -607,6 +613,24 @@ public class ConnectionWrapper {
 			if (args.length > 0) {
 				sql += "\nargs = " + argsString;
 			}
+		}
+
+		return sql.trim();
+	}
+
+	private String formatSQL(Object[] args, String sql) {
+
+		if (sql.trim().endsWith(";") == false) {
+			sql += ";";
+		}
+
+		String argsString = "";
+		for (int i = 0; i < args.length; i++) {
+			argsString += "[" + args[i] + "] ";
+		}
+		argsString = argsString.trim();
+		if (args.length > 0) {
+			sql += "\nargs = " + argsString;
 		}
 
 		return sql.trim();
