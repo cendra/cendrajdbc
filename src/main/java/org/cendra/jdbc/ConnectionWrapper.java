@@ -276,6 +276,59 @@ public class ConnectionWrapper {
 		return table;
 	}
 
+	public ResultSet findToResultSet(String sql, Object... args)
+			throws SQLExceptionWrapper {
+
+		try {
+
+			PreparedStatement preparedStatement = getConnection()
+					.prepareStatement(sql);
+
+			printSQLWarning(preparedStatement.getWarnings());
+
+			if (args != null) {
+				for (int i = 0; i < args.length; i++) {
+					set(preparedStatement, args[i], (i + 1));
+				}
+			}
+
+			sql = formatSQL(preparedStatement, args, sql);
+
+			addSqlStatement(sql);
+
+			return executeQueryToResultSet(preparedStatement, sql);
+
+		} catch (SQLException e) {
+			printSQLEnd(buildPrintSQLStart(formatSQL(args, sql)));
+			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_SELECT,
+					TITLE_SELECT, SUBJECT_SELECT);
+		}
+
+	}
+
+	private ResultSet executeQueryToResultSet(
+			PreparedStatement preparedStatement, String sql)
+			throws SQLException {
+
+		String msg = buildPrintSQLStart(sql);
+
+		ResultSet resultSet = preparedStatement.executeQuery();
+		printSQLWarning(resultSet.getWarnings());
+
+		printSQLEnd(msg);
+
+		// if (resultSet != null && resultSet.isClosed() == false) {
+		// resultSet.close();
+		// }
+
+		// if (preparedStatement != null && preparedStatement.isClosed() ==
+		// false) {
+		// preparedStatement.close();
+		// }
+
+		return resultSet;
+	}
+
 	public int insert(String sql) throws SQLExceptionWrapper {
 		return insert(sql, new Object[0]);
 	}
