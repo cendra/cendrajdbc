@@ -252,13 +252,13 @@ public class ConnectionWrapper {
 			list = mapper.listMapper(resultSet);
 		} catch (IllegalAccessException e) {			
 			throw new SQLExceptionByCendraConvention(e);
-		} catch (IllegalArgumentException e) {			
+		} catch (IllegalArgumentException e) {					
 			throw new SQLExceptionByCendraConvention(e);
-		} catch (InvocationTargetException e) {			
+		} catch (InvocationTargetException e) {					
 			throw new SQLExceptionByCendraConvention(e);
-		} catch (InstantiationException e) {			
+		} catch (InstantiationException e) {					
 			throw new SQLExceptionByCendraConvention(e);
-		} catch (ClassNotFoundException e) {			
+		} catch (ClassNotFoundException e) {							
 			throw new SQLExceptionByCendraConvention(e);
 		}
 

@@ -41,7 +41,7 @@ public class SQLExceptionByCendraConvention extends SQLException {
 	}
 
 	public String getMessage() {
-		return e.getMessage();
+		return "The query SQL does not respect the Cendra convention:\n" + e.getMessage();
 	}
 
 	public StackTraceElement[] getStackTrace() {
@@ -58,7 +58,7 @@ public class SQLExceptionByCendraConvention extends SQLException {
 
 	@Override
 	public String toString() {
-		return e.toString();
+		return "The query SQL does not respect the Cendra convention:\n" + e.toString();
 	}
 
 }

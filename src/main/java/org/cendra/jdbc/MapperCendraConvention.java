@@ -47,7 +47,6 @@ class MapperCendraConvention {
 
 		for (int j = 0; j < c; j++) {
 			String colName = resultSet.getMetaData().getColumnName((j + 1));
-			System.out.println("colName ::::::::::::::::::::::::: " + colName);
 			Object cellValue = resultSet.getObject((j + 1));
 
 			if (j != 0) {
@@ -57,6 +56,7 @@ class MapperCendraConvention {
 			} else {
 				objClass = Class.forName(cellValue.toString());
 				obj = objClass.newInstance();
+
 			}
 		}
 
@@ -145,7 +145,7 @@ class MapperCendraConvention {
 
 		for (Method method : methods) {
 
-			if (method.getName().equals(methodName)
+			if (method.getName().equalsIgnoreCase(methodName)
 					&& method.getParameterCount() == 0) {
 
 				return method;
@@ -162,7 +162,7 @@ class MapperCendraConvention {
 
 		for (Method method : methods) {
 
-			if (method.getName().equals(methodName)
+			if (method.getName().equalsIgnoreCase(methodName)
 					&& method.getParameterCount() == 1) {
 
 				return method;

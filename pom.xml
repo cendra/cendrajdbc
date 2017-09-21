@@ -23,5 +23,47 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
+		
+				<!-- https://mvnrepository.com/artifact/org.codehaus.jackson/jackson-core-asl -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.codehaus.jackson</groupId> -->
+<!-- 			<artifactId>jackson-core-asl</artifactId> -->
+<!-- 			<version>1.9.13</version> -->
+<!-- 		</dependency> -->
+
+		<!-- https://mvnrepository.com/artifact/org.codehaus.jackson/jackson-mapper-asl -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.codehaus.jackson</groupId> -->
+<!-- 			<artifactId>jackson-mapper-asl</artifactId> -->
+<!-- 			<version>1.9.13</version> -->
+<!-- 		</dependency> -->
+
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.opencsv</groupId> -->
+<!-- 			<artifactId>opencsv</artifactId> -->
+<!-- 			<version>3.9</version> -->
+<!-- 		</dependency> -->
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>postgresql</groupId> -->
+<!-- 			<artifactId>postgresql</artifactId> -->
+<!-- 			<version>9.1-901-1.jdbc4</version> -->
+<!-- 		</dependency> -->
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>commons-dbcp</groupId> -->
+<!-- 			<artifactId>commons-dbcp</artifactId> -->
+<!-- 			<version>1.4</version> -->
+<!-- 		</dependency> -->
+
+		<!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.microsoft.sqlserver</groupId> -->
+<!-- 			<artifactId>mssql-jdbc</artifactId> -->
+<!-- 			<version>6.1.6.jre8-preview</version> -->
+<!-- 		</dependency> -->
+
+		
 	</dependencies>
 </project>
