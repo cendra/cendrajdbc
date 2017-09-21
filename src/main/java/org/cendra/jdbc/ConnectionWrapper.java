@@ -1,5 +1,6 @@
 package org.cendra.jdbc;
 
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Date;
@@ -195,6 +196,83 @@ public class ConnectionWrapper {
 	}
 
 	// ===================================================================================================
+
+	@SuppressWarnings("rawtypes")
+	public List findToListByCendraConvention(String sql)
+			throws SQLExceptionWrapper, Exception {
+		return findToListByCendraConvention(sql, new Object[0]);
+	}
+
+	@SuppressWarnings("rawtypes")
+	public List findToListByCendraConvention(String sql, Object... args)
+			throws SQLExceptionWrapper {
+
+		try {
+
+			PreparedStatement preparedStatement = getConnection()
+					.prepareStatement(sql);
+
+			printSQLWarning(preparedStatement.getWarnings());
+
+			if (args != null) {
+				for (int i = 0; i < args.length; i++) {
+					set(preparedStatement, args[i], (i + 1));
+				}
+			}
+
+			sql = formatSQL(preparedStatement, args, sql);
+
+			addSqlStatement(sql);
+
+			return executeQueryToListByCendraConvention(preparedStatement, sql);
+
+		} catch (SQLException e) {			
+			printSQLEnd(buildPrintSQLStart(formatSQL(args, sql)));
+			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_SELECT,
+					TITLE_SELECT, SUBJECT_SELECT);
+		}
+
+	}
+
+	@SuppressWarnings("rawtypes")
+	private List executeQueryToListByCendraConvention(
+			PreparedStatement preparedStatement, String sql)
+			throws SQLException {
+
+		String msg = buildPrintSQLStart(sql);
+
+		ResultSet resultSet = preparedStatement.executeQuery();
+		printSQLWarning(resultSet.getWarnings());
+
+		printSQLEnd(msg);
+
+		MapperCendraConvention mapper = new MapperCendraConvention();
+		List list = new ArrayList();
+		try {
+			list = mapper.listMapper(resultSet);
+		} catch (IllegalAccessException e) {			
+			throw new SQLExceptionByCendraConvention(e);
+		} catch (IllegalArgumentException e) {			
+			throw new SQLExceptionByCendraConvention(e);
+		} catch (InvocationTargetException e) {			
+			throw new SQLExceptionByCendraConvention(e);
+		} catch (InstantiationException e) {			
+			throw new SQLExceptionByCendraConvention(e);
+		} catch (ClassNotFoundException e) {			
+			throw new SQLExceptionByCendraConvention(e);
+		}
+
+		// if (resultSet != null && resultSet.isClosed() == false) {
+		// resultSet.close();
+		// }
+
+		// if (preparedStatement != null && preparedStatement.isClosed() ==
+		// false) {
+		// preparedStatement.close();
+		// }
+
+		return list;
+	}
 
 	public Object[][] findToTable(String sql) throws SQLExceptionWrapper,
 			Exception {

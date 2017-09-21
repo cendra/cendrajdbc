@@ -1,21 +1,26 @@
 package org.cendra.jdbc;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapperCendraConvention {
+class MapperCendraConvention {
 
 	// All POJOs model empty
 	// Query (SQL) attributes with dot notation (. = _)
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public List listMapper(ResultSet resultSet) throws Exception {
+	public List listMapper(ResultSet resultSet) throws SQLException,
+			IllegalAccessException, IllegalArgumentException,
+			InvocationTargetException, InstantiationException,
+			ClassNotFoundException {
 
 		int c = resultSet.getMetaData().getColumnCount();
 
@@ -31,7 +36,10 @@ public class MapperCendraConvention {
 
 	}
 
-	public Object rowMapper(ResultSet resultSet, int c) throws Exception {
+	public Object rowMapper(ResultSet resultSet, int c) throws SQLException,
+			IllegalAccessException, IllegalArgumentException,
+			InvocationTargetException, InstantiationException,
+			ClassNotFoundException {
 
 		@SuppressWarnings("rawtypes")
 		Class objClass = null;
@@ -39,6 +47,7 @@ public class MapperCendraConvention {
 
 		for (int j = 0; j < c; j++) {
 			String colName = resultSet.getMetaData().getColumnName((j + 1));
+			System.out.println("colName ::::::::::::::::::::::::: " + colName);
 			Object cellValue = resultSet.getObject((j + 1));
 
 			if (j != 0) {
@@ -56,7 +65,9 @@ public class MapperCendraConvention {
 	}
 
 	private void atts(@SuppressWarnings("rawtypes") Class objClass,
-			String colName, Object obj, Object cellValue) throws Exception {
+			String colName, Object obj, Object cellValue)
+			throws IllegalAccessException, IllegalArgumentException,
+			InvocationTargetException, InstantiationException {
 
 		String[] pathItems = colName.split("_");
 		String pathItem = pathItems[0].trim();
@@ -107,7 +118,8 @@ public class MapperCendraConvention {
 		}
 	}
 
-	private boolean objectIsEmpty(Object obj) throws Exception {
+	private boolean objectIsEmpty(Object obj) throws IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException {
 
 		@SuppressWarnings("rawtypes")
 		Class objClass = obj.getClass();
@@ -203,7 +215,8 @@ public class MapperCendraConvention {
 	}
 
 	private void executeMethodSet(Object cellValue, Method method, Object obj)
-			throws Exception {
+			throws IllegalAccessException, IllegalArgumentException,
+			InvocationTargetException {
 
 		@SuppressWarnings("rawtypes")
 		Class cc = (Class) method.getParameterTypes()[0];
