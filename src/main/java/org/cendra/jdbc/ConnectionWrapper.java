@@ -518,7 +518,11 @@ public class ConnectionWrapper {
 
 		int r = 0;
 
+//		System.out.println(preparedStatement);
+		
 		r = preparedStatement.executeUpdate();
+		
+//		System.out.println(preparedStatement);
 
 		printSQLEnd(msg);
 

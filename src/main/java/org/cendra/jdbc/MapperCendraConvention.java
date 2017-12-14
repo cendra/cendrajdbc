@@ -130,7 +130,8 @@ class MapperCendraConvention {
 					&& method.getName().equals("getClass") == false) {
 
 				Object methodGetValueReturnm = method.invoke(obj);
-				if (methodGetValueReturnm != null) {
+				if (methodGetValueReturnm != null
+						&& objectIsEmpty(methodGetValueReturnm)) {
 					return false;
 				}
 			}
