@@ -3,7 +3,7 @@ package org.cendra.jdbc;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.sql.Date;
+//import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
@@ -75,7 +75,7 @@ class MapperCendraConvention {
 		String methodName = (pathItem.charAt(0) + "").toUpperCase()
 				+ pathItem.substring(1, pathItem.length());
 		Method methodSet = getMethodSet(objClass, "set" + methodName);
-		boolean isModelClassParameter = isModelClassParameter(methodSet);
+		boolean isModelClassParameter = this.isModelClassParameter(methodSet);
 		if (isModelClassParameter) {
 			Method methodGet = getMethodGet(objClass, "get" + methodName);
 			Object methodGetValueReturnm = methodGet.invoke(obj);
@@ -109,8 +109,10 @@ class MapperCendraConvention {
 				// executeMethodSet(cellValue, methodSet, obj);
 			}
 
-			if (objectIsEmpty(obj2) == false) {
-				methodSet.invoke(obj, obj2);
+			if (isModelClass(obj2.getClass())) {
+				if (objectIsEmpty(obj2) == false) {
+					methodSet.invoke(obj, obj2);
+				}
 			}
 
 		} else {
@@ -121,23 +123,85 @@ class MapperCendraConvention {
 	private boolean objectIsEmpty(Object obj) throws IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
 
+		if (obj == null) {
+			return true;
+		}
+
 		@SuppressWarnings("rawtypes")
 		Class objClass = obj.getClass();
+
 		Method[] methods = objClass.getMethods();
 		for (Method method : methods) {
+
 			if (method.getName().startsWith("get")
 					&& method.getParameterCount() == 0
 					&& method.getName().equals("getClass") == false) {
+				// try {
 
-				Object methodGetValueReturnm = method.invoke(obj);
-				if (methodGetValueReturnm != null
-						&& objectIsEmpty(methodGetValueReturnm)) {
+				Object methodGetValueReturn = method.invoke(obj);
+
+				if (methodGetValueReturn != null
+						&& isModelClassReturn(method) == true) {
+
+					if (objectIsEmpty(methodGetValueReturn) == false) {
+						return false;
+					}
+
+				} else if (methodGetValueReturn != null
+						&& isModelClassReturn(method) == false) {
 					return false;
 				}
+				// } catch (Exception e) {
+				// e.printStackTrace();
+				// // System.out.println(obj.getClass() + " " + method);
+				// }
 			}
 		}
 
 		return true;
+	}
+
+	private boolean isModelClassReturn(Method methodGet) {
+		@SuppressWarnings("rawtypes")
+		Class cc = (Class) methodGet.getReturnType();
+
+		return isModelClass(cc);
+	}
+
+	private boolean isModelClass(@SuppressWarnings("rawtypes") Class cc) {
+
+		if (cc.equals(String.class)) {
+			return false;
+		} else if (cc.equals(Boolean.class)) {
+			return false;
+		} else if (cc.equals(Short.class)) {
+			return false;
+		} else if (cc.equals(Integer.class)) {
+			return false;
+		} else if (cc.equals(Long.class)) {
+			return false;
+		} else if (cc.equals(Float.class)) {
+			return false;
+		} else if (cc.equals(Double.class)) {
+			return false;
+		} else if (cc.equals(BigDecimal.class)) {
+			return false;
+		} else if (cc.equals(java.util.Date.class)) {
+			return false;
+		} else if (cc.equals(java.sql.Date.class)) {
+			return false;
+		} else if (cc.equals(Timestamp.class)) {
+			return false;
+		} else if (cc.equals(Time.class)) {
+			return false;
+			// } else if
+			// (cc.getPackage().getName().equals("com.massoftware.model")) {
+			// return true;
+		} else {
+			// throw new IllegalArgumentException("Type not found. " + cc);
+			return true;
+		}
+
 	}
 
 	private Method getMethodGet(@SuppressWarnings("rawtypes") Class objClass,
@@ -183,7 +247,6 @@ class MapperCendraConvention {
 		if (cc.equals(String.class)) {
 			return false;
 		} else if (cc.equals(Boolean.class)) {
-
 			return false;
 		} else if (cc.equals(Short.class)) {
 			return false;
@@ -197,9 +260,9 @@ class MapperCendraConvention {
 			return false;
 		} else if (cc.equals(BigDecimal.class)) {
 			return false;
-		} else if (cc.equals(Date.class)) {
-			return false;
 		} else if (cc.equals(java.util.Date.class)) {
+			return false;
+		} else if (cc.equals(java.sql.Date.class)) {
 			return false;
 		} else if (cc.equals(Timestamp.class)) {
 			return false;
@@ -284,7 +347,7 @@ class MapperCendraConvention {
 			if (cellValue != null) {
 				method.invoke(obj, cellValue);
 			}
-		} else if (cc.equals(Date.class)) {
+		} else if (cc.equals(java.sql.Date.class)) {
 			if (cellValue != null) {
 				method.invoke(obj, cellValue);
 			}

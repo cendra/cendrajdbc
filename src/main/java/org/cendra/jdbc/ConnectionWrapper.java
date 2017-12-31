@@ -226,7 +226,7 @@ public class ConnectionWrapper {
 
 			return executeQueryToListByCendraConvention(preparedStatement, sql);
 
-		} catch (SQLException e) {			
+		} catch (SQLException e) {
 			printSQLEnd(buildPrintSQLStart(formatSQL(args, sql)));
 			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_SELECT,
 					TITLE_SELECT, SUBJECT_SELECT);
@@ -250,15 +250,15 @@ public class ConnectionWrapper {
 		List list = new ArrayList();
 		try {
 			list = mapper.listMapper(resultSet);
-		} catch (IllegalAccessException e) {			
+		} catch (IllegalAccessException e) {
 			throw new SQLExceptionByCendraConvention(e);
-		} catch (IllegalArgumentException e) {					
+		} catch (IllegalArgumentException e) {
 			throw new SQLExceptionByCendraConvention(e);
-		} catch (InvocationTargetException e) {					
+		} catch (InvocationTargetException e) {
 			throw new SQLExceptionByCendraConvention(e);
-		} catch (InstantiationException e) {					
+		} catch (InstantiationException e) {
 			throw new SQLExceptionByCendraConvention(e);
-		} catch (ClassNotFoundException e) {							
+		} catch (ClassNotFoundException e) {
 			throw new SQLExceptionByCendraConvention(e);
 		}
 
@@ -355,7 +355,7 @@ public class ConnectionWrapper {
 	}
 
 	public ResultSet findToResultSet(String sql, Object... args)
-			throws SQLExceptionWrapper {
+			throws SQLExceptionWrapper, SQLException {
 
 		try {
 
@@ -407,11 +407,12 @@ public class ConnectionWrapper {
 		return resultSet;
 	}
 
-	public int insert(String sql) throws SQLExceptionWrapper {
+	public int insert(String sql) throws SQLExceptionWrapper, SQLException {
 		return insert(sql, new Object[0]);
 	}
 
-	public int insert(String sql, Object... args) throws SQLExceptionWrapper {
+	public int insert(String sql, Object... args) throws SQLExceptionWrapper,
+			SQLException {
 
 		try {
 
@@ -440,11 +441,12 @@ public class ConnectionWrapper {
 		}
 	}
 
-	public int update(String sql) throws SQLExceptionWrapper {
+	public int update(String sql) throws SQLExceptionWrapper, SQLException {
 		return update(sql, new Object[0]);
 	}
 
-	public int update(String sql, Object... args) throws SQLExceptionWrapper {
+	public int update(String sql, Object... args) throws SQLExceptionWrapper,
+			SQLException {
 
 		try {
 
@@ -473,11 +475,12 @@ public class ConnectionWrapper {
 		}
 	}
 
-	public int dalete(String sql) throws SQLExceptionWrapper {
+	public int dalete(String sql) throws SQLExceptionWrapper, SQLException {
 		return delete(sql, new Object[0]);
 	}
 
-	public int delete(String sql, Object... args) throws SQLExceptionWrapper {
+	public int delete(String sql, Object... args) throws SQLExceptionWrapper,
+			SQLException {
 
 		try {
 
@@ -518,11 +521,11 @@ public class ConnectionWrapper {
 
 		int r = 0;
 
-//		System.out.println(preparedStatement);
-		
+		// System.out.println(preparedStatement);
+
 		r = preparedStatement.executeUpdate();
-		
-//		System.out.println(preparedStatement);
+
+		// System.out.println(preparedStatement);
 
 		printSQLEnd(msg);
 
@@ -538,16 +541,20 @@ public class ConnectionWrapper {
 	private String buildPrintSQLStart(String sql) {
 
 		if (isVerbose()) {
-			return "\n\n[..] Ejecutando SQL " + ZonedDateTime.now() + "\n\n"
-					+ sql;
+
+			return "\n\n[..] Ejecutando SQL " + ZonedDateTime.now() + " ["
+					+ dataSourceMetaData + "]\n\n" + sql;
 		}
 
 		return null;
 	}
 
 	private void printSQLEnd(String msgSql) {
+
 		if (isVerbose()) {
-			msgSql += "\n\n[OK] SQL ejecutando " + ZonedDateTime.now() + "\n\n";
+
+			msgSql += "\n\n[OK] SQL ejecutando " + ZonedDateTime.now() + " ["
+					+ dataSourceMetaData + "]\n\n";
 
 			errorPrinter.print(this.getClass().getName(),
 					LogPrinter.LEVEL_INFO, msgSql);

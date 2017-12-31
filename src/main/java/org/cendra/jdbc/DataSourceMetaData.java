@@ -74,5 +74,9 @@ public class DataSourceMetaData {
 	public void setjDBCMinorVersion(int jDBCMinorVersion) {
 		this.jDBCMinorVersion = jDBCMinorVersion;
 	}
+	
+	public String toString(){
+		return getDatabaseProductName() + " " + getDatabaseProductVersion()  + " " + getDriverName() + " " + getDriverVersion();
+	}
 
 }
