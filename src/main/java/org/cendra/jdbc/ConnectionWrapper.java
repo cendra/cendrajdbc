@@ -253,6 +253,7 @@ public class ConnectionWrapper {
 		} catch (IllegalAccessException e) {
 			throw new SQLExceptionByCendraConvention(e);
 		} catch (IllegalArgumentException e) {
+			e.printStackTrace(); //666
 			throw new SQLExceptionByCendraConvention(e);
 		} catch (InvocationTargetException e) {
 			throw new SQLExceptionByCendraConvention(e);
@@ -590,53 +591,55 @@ public class ConnectionWrapper {
 
 		if (value != null) {
 
-			if (value instanceof String) {
+			if (value.getClass() == String.class) {
 
 				preparedStatement.setString(i, (String) value);
 
-			} else if (value instanceof Boolean) {
+			} else if (value.getClass() == Boolean.class) {
 
 				preparedStatement.setBoolean(i, (Boolean) value);
 
-			} else if (value instanceof Short) {
+			} else if (value.getClass() == Short.class) {
 
 				preparedStatement.setShort(i, (Short) value);
 
-			} else if (value instanceof Integer) {
+			} else if (value.getClass() == Integer.class) {
 
 				preparedStatement.setInt(i, (Integer) value);
 
-			} else if (value instanceof Long) {
+			} else if (value.getClass() == Long.class) {
 
 				preparedStatement.setLong(i, (Long) value);
 
-			} else if (value instanceof Float) {
+			} else if (value.getClass() == Float.class) {
 
 				preparedStatement.setFloat(i, (Float) value);
 
-			} else if (value instanceof Double) {
+			} else if (value.getClass() == Double.class) {
 
 				preparedStatement.setDouble(i, (Double) value);
 
-			} else if (value instanceof BigDecimal) {
+			} else if (value.getClass() == BigDecimal.class) {
 
 				preparedStatement.setBigDecimal(i, (BigDecimal) value);
 
-			} else if (value instanceof Date) {
+			} else if (value.getClass() == Date.class) {
 
 				preparedStatement.setDate(i, (Date) value);
 
-			} else if (value instanceof java.util.Date) {
+			} else if (value.getClass() == java.util.Date.class) {
 
 				Date sqlDate = new Date(((java.util.Date) value).getTime());
 
 				preparedStatement.setDate(i, sqlDate);
 
-			} else if (value instanceof Timestamp) {
+			} else if (value.getClass() == Timestamp.class) {
+
+				System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxx " + value);
 
 				preparedStatement.setTimestamp(i, (Timestamp) value);
 
-			} else if (value instanceof Time) {
+			} else if (value.getClass() == Time.class) {
 
 				preparedStatement.setTime(i, (Time) value);
 
@@ -684,51 +687,53 @@ public class ConnectionWrapper {
 	private SQLExceptionWrapper buildSQLExceptionWrapper(
 			SQLException sQLException, String operationType, String title,
 			String subject) {
+		
+		sQLException.printStackTrace(); //666
 
-		SQLExceptionWrapper sQLExceptionWrapper = new SQLExceptionWrapper(
+		SQLExceptionWrapper sqlExceptionWrapper = new SQLExceptionWrapper(
 				sQLException);
 
-		sQLExceptionWrapper.setTitle(title);
-		sQLExceptionWrapper.setSubject(subject);
+		sqlExceptionWrapper.setTitle(title);
+		sqlExceptionWrapper.setSubject(subject);
 
-		sQLExceptionWrapper.setOperationType(operationType);
+		sqlExceptionWrapper.setOperationType(operationType);
 
 		if (this.dataSourceProperties != null) {
-			sQLExceptionWrapper.setDriverClassName(dataSourceProperties
+			sqlExceptionWrapper.setDriverClassName(dataSourceProperties
 					.getDriverClassName());
-			sQLExceptionWrapper.setInitialSize(dataSourceProperties
+			sqlExceptionWrapper.setInitialSize(dataSourceProperties
 					.getInitialSize());
-			sQLExceptionWrapper.setMaxActive(dataSourceProperties
+			sqlExceptionWrapper.setMaxActive(dataSourceProperties
 					.getMaxActive());
-			sQLExceptionWrapper.setMaxIdle(dataSourceProperties.getMaxIdle());
-			sQLExceptionWrapper.setValidationQuery(dataSourceProperties
+			sqlExceptionWrapper.setMaxIdle(dataSourceProperties.getMaxIdle());
+			sqlExceptionWrapper.setValidationQuery(dataSourceProperties
 					.getValidationQuery());
 		}
 
 		if (dataSourceMetaData != null) {
-			sQLExceptionWrapper.setDatabaseProductName(dataSourceMetaData
+			sqlExceptionWrapper.setDatabaseProductName(dataSourceMetaData
 					.getDatabaseProductName());
-			sQLExceptionWrapper.setDatabaseProductVersion(dataSourceMetaData
+			sqlExceptionWrapper.setDatabaseProductVersion(dataSourceMetaData
 					.getDatabaseProductVersion());
-			sQLExceptionWrapper.setDriverName(dataSourceMetaData
+			sqlExceptionWrapper.setDriverName(dataSourceMetaData
 					.getDriverName());
-			sQLExceptionWrapper.setDriverVersion(dataSourceMetaData
+			sqlExceptionWrapper.setDriverVersion(dataSourceMetaData
 					.getDriverVersion());
-			sQLExceptionWrapper.setjDBCMajorVersion(dataSourceMetaData
+			sqlExceptionWrapper.setjDBCMajorVersion(dataSourceMetaData
 					.getjDBCMajorVersion());
-			sQLExceptionWrapper.setjDBCMinorVersion(dataSourceMetaData
+			sqlExceptionWrapper.setjDBCMinorVersion(dataSourceMetaData
 					.getjDBCMinorVersion());
-			sQLExceptionWrapper.setUrl(dataSourceMetaData.getUrl());
-			sQLExceptionWrapper.setUserName(dataSourceMetaData.getUserName());
+			sqlExceptionWrapper.setUrl(dataSourceMetaData.getUrl());
+			sqlExceptionWrapper.setUserName(dataSourceMetaData.getUserName());
 
 		} else if (this.dataSourceProperties != null) {
-			sQLExceptionWrapper.setUrl(dataSourceProperties.getUrl());
-			sQLExceptionWrapper.setUserName(dataSourceProperties.getUserName());
+			sqlExceptionWrapper.setUrl(dataSourceProperties.getUrl());
+			sqlExceptionWrapper.setUserName(dataSourceProperties.getUserName());
 		}
 
-		sQLExceptionWrapper.setSqlStatements(sqlStatements);
+		sqlExceptionWrapper.setSqlStatements(sqlStatements);
 
-		return sQLExceptionWrapper;
+		return sqlExceptionWrapper;
 
 	}
 

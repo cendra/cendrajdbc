@@ -57,7 +57,7 @@ class InfoException {
 
 			timeException = sQLExceptionWrapper.getTime().toString();
 
-			nameExceptionWrapper = sQLExceptionWrapper.getsQLException()
+			nameExceptionWrapper = sQLExceptionWrapper.getSQLException()
 					.getClass().toString();
 
 			if (sQLExceptionWrapper.getTitle() != null) {

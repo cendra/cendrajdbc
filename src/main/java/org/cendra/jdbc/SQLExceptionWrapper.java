@@ -12,7 +12,7 @@ public class SQLExceptionWrapper extends Exception {
 	 */
 	private static final long serialVersionUID = -5504598004204150746L;
 
-	private SQLException sQLException;
+	private SQLException sqlException;
 
 	private ZonedDateTime time;
 	private String title = "unknown";
@@ -36,34 +36,34 @@ public class SQLExceptionWrapper extends Exception {
 	private int jDBCMinorVersion = -1;
 	private List<String> sqlStatements = new ArrayList<String>();
 
-	public SQLExceptionWrapper(SQLException sQLException) {
+	public SQLExceptionWrapper(SQLException sqlException) {
 		super();
 		time = ZonedDateTime.now();
-		this.sQLException = sQLException;
+		this.sqlException = sqlException;
 	}
 
-	public SQLException getsQLException() {
-		return sQLException;
+	public SQLException getSQLException() {
+		return sqlException;
 	}
 
 	public Throwable getCause() {
-		return sQLException.getCause();
+		return sqlException.getCause();
 	}
 
 	public String getMessage() {
-		return sQLException.getMessage();
+		return sqlException.getMessage();
 	}
 
 	public StackTraceElement[] getStackTrace() {
-		return sQLException.getStackTrace();
+		return sqlException.getStackTrace();
 	}
 
 	public int getErrorCode() {
-		return sQLException.getErrorCode();
+		return sqlException.getErrorCode();
 	}
 
 	public String getSQLState() {
-		return sQLException.getSQLState();
+		return sqlException.getSQLState();
 	}
 
 	public String getOperationType() {
@@ -208,7 +208,7 @@ public class SQLExceptionWrapper extends Exception {
 
 	@Override
 	public String toString() {
-		return sQLException.toString();
+		return sqlException.toString();
 	}
 
 }

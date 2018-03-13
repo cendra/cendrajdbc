@@ -32,7 +32,7 @@ public class SQLExceptionByCendraConvention extends SQLException {
 		this.e = e;
 	}
 
-	public Exception getsQLException() {
+	public Exception getSQLException() {
 		return e;
 	}
 

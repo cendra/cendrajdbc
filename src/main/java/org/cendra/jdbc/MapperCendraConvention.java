@@ -287,86 +287,112 @@ class MapperCendraConvention {
 
 		if (cc.equals(String.class)) {
 			if (cellValue != null) {
-				method.invoke(obj, cellValue);
+//				method.invoke(obj, cellValue);666
+				invoke(cellValue, method, obj);
 			}
 		} else if (cc.equals(Boolean.class)) {
 
 			if (cellValue != null
 					&& cellValue.getClass().getName()
 							.equals(Integer.class.getName())) {
+				
 				Integer cellValueInteger = (Integer) cellValue;
 				Boolean b = (cellValue != null && cellValueInteger == 1);
-				method.invoke(obj, b);
+//				method.invoke(obj, b);			
+				invoke(b, method, obj);
 			} else if (cellValue != null
 					&& cellValue.getClass().getName()
 							.equals(Short.class.getName())) {
+				
 				Short cellValueShort = (Short) cellValue;
 				Boolean b = (cellValue != null && cellValueShort == 1);
-				method.invoke(obj, b);
+//				method.invoke(obj, b);
+				invoke(b, method, obj);
 			} else if (cellValue != null
 					&& cellValue.getClass().getName()
 							.equals(Long.class.getName())) {
+				
 				Long cellValueLong = (Long) cellValue;
 				Boolean b = (cellValue != null && cellValueLong == 1);
-				method.invoke(obj, b);
+//				method.invoke(obj, b);
+				invoke(b, method, obj);
 			} else if (cellValue != null
 					&& cellValue.getClass().getName()
 							.equals(String.class.getName())) {
+				
 				String cellValueString = (String) cellValue;
 				Boolean b = (cellValue != null && (cellValueString
 						.equalsIgnoreCase("true")
 						|| cellValueString.equalsIgnoreCase("t") || cellValueString
 						.equalsIgnoreCase("1")));
-				method.invoke(obj, b);
+//				method.invoke(obj, b);
+				invoke(b, method, obj);
 			} else {
 				if (cellValue != null) {
-					method.invoke(obj, cellValue);
+//					method.invoke(obj, cellValue);
+					invoke(cellValue, method, obj);
 				}
 			}
 		} else if (cc.equals(Short.class)) {
-			if (cellValue != null) {
-				method.invoke(obj, cellValue);
-			}
+			invoke(cellValue, method, obj);
 		} else if (cc.equals(Integer.class)) {
-			if (cellValue != null) {
-				method.invoke(obj, cellValue);
-			}
+			invoke(cellValue, method, obj);
 		} else if (cc.equals(Long.class)) {
-			if (cellValue != null) {
-				method.invoke(obj, cellValue);
-			}
+			invoke(cellValue, method, obj);
 		} else if (cc.equals(Float.class)) {
-			if (cellValue != null) {
-				method.invoke(obj, cellValue);
-			}
+			invoke(cellValue, method, obj);
 		} else if (cc.equals(Double.class)) {
-			if (cellValue != null) {
-				method.invoke(obj, cellValue);
-			}
+			invoke(cellValue, method, obj);
 		} else if (cc.equals(BigDecimal.class)) {
-			if (cellValue != null) {
-				method.invoke(obj, cellValue);
-			}
+			invoke(cellValue, method, obj);
 		} else if (cc.equals(java.sql.Date.class)) {
-			if (cellValue != null) {
-				method.invoke(obj, cellValue);
-			}
+			invoke(cellValue, method, obj);
 		} else if (cc.equals(java.util.Date.class)) {
-			if (cellValue != null) {
-				method.invoke(obj, cellValue);
-			}
+			invoke(cellValue, method, obj);
 		} else if (cc.equals(Timestamp.class)) {
-			if (cellValue != null) {
-				method.invoke(obj, cellValue);
-			}
+			invoke(cellValue, method, obj);
 		} else if (cc.equals(Time.class)) {
-			if (cellValue != null) {
-				method.invoke(obj, cellValue);
-			}
+			invoke(cellValue, method, obj);
 		} else {
-			throw new IllegalArgumentException("Type not found. " + cc);
+			String classType = "unknown";
+			if (cellValue != null) {
+				classType = cellValue.getClass().getCanonicalName();
+			}
+
+			throw new IllegalArgumentException("Se intento ingresar el valor ["
+					+ cellValue + "] de tipo de dato [" + classType
+					+ "] en un método que espera un tipo de dato ["
+					+ cc.getCanonicalName() + "].");
+
 		}
 
+	}
+
+	private void invoke(Object cellValue, Method method, Object obj)
+			throws IllegalAccessException, InvocationTargetException,
+			InvocationTargetException {
+		if (cellValue != null) {
+
+			try {
+				method.invoke(obj, cellValue);
+			} catch (IllegalAccessException e1) {
+				throw e1;
+			} catch (IllegalArgumentException e1) {
+				String classType = "unknown";
+				if (cellValue != null) {
+					classType = cellValue.getClass().getCanonicalName();
+				}
+
+				throw new IllegalArgumentException(e1.getMessage()
+						+ ". Se intento ingresar el valor [" + cellValue
+						+ "] de tipo de dato [" + classType
+						+ "] en el método [" + method + "]");
+
+			} catch (InvocationTargetException e1) {
+				throw e1;
+			}
+
+		}
 	}
 
 }
